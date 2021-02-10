@@ -156,6 +156,8 @@ class Discriminator(torch.nn.Module):
                     bias=False,
                 ),
                 nn.LeakyReLU(0.2, inplace=True),
+                nn.Dropout(0.3)
+
                 
             )
         else:
