@@ -38,13 +38,13 @@ class Generator(nn.Module):
 
         self.gen = nn.Sequential(
             self.genBlock(input_channels=self.input_shape, hidden_size=512, kernel_size=4, stride=1, padding=0,),
-            self.genBlock(input_channels=512, hidden_size=412, kernel_size=4, stride=2, padding=1,),
-            self.genBlock(input_channels=412, hidden_size=312, kernel_size=4, stride=2, padding=1,),
-            self.genBlock(input_channels=312, hidden_size=212, kernel_size=4, stride=2, padding=1,),
+            self.genBlock(input_channels=512, hidden_size=256, kernel_size=4, stride=2, padding=1,),
+            self.genBlock(input_channels=256, hidden_size=128, kernel_size=4, stride=2, padding=1,),
+            self.genBlock(input_channels=128, hidden_size=64, kernel_size=4, stride=2, padding=1,),
             self.genBlock(
-                input_channels=212, hidden_size=112, kernel_size=4, stride=2, padding=1,  # final layer returning tanh
+                input_channels=64, hidden_size=64, kernel_size=4, stride=2, padding=1,  # final layer returning tanh
             ),
-            nn.Conv2d(112, 3, 4, 1, 2),
+            nn.Conv2d(64, 3, 4, 1, 2),
             nn.Tanh(),
         )
 
