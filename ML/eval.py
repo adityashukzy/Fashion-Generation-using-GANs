@@ -1,19 +1,19 @@
 import torch
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
-import ML.models
-from ML.dataset import Data
+import Definitions.models as models
+from Definitions.dataset import Data
 
 if __name__ == "__main__":
     vec_shape = 1000
-
+    noise_dim = 500
     root = "55epoch/"
 
     print(f"Evalutating with VecSize {vec_shape} from {root}")
 
-    netG = ML.models.Generator(device="cpu", noisedim=500, vec_shape=vec_shape)
-    netD = ML.models.Discriminator()
-    netENC = ML.models.ResNetEncoder(vec_shape)
+    netG = models.Generator(device="cpu", noise_dim=noise_dim, vec_shape=vec_shape)
+    netD = models.Discriminator()
+    netENC = models.ResNetEncoder(vec_shape)
 
     netG.load_state_dict(torch.load(root + "Gen.pt"))
     netD.load_state_dict(torch.load(root + "Dis.pt"))
@@ -35,19 +35,13 @@ if __name__ == "__main__":
         vector = netENC(imgs)
         fakeImages = netG(vector)
 
-    _, ax = plt.subplots(
-        2, numrows, squeeze=False, sharex=True, sharey=True, figsize=(8, 4)
-    )
+    _, ax = plt.subplots(2, numrows, squeeze=False, sharex=True, sharey=True, figsize=(8, 4))
 
     for i in range(numrows):
-        ax[0, i].imshow(
-            (fakeImages[i].permute(1, 2, 0).numpy() + [1, 1, 1]) / [2, 2, 2]
-        )
+        ax[0, i].imshow((fakeImages[i].permute(1, 2, 0).numpy() + [1, 1, 1]) / [2, 2, 2])
         ax[0, i].axis(False)
 
-        ax[1, i].imshow(
-            (imgs[i].permute(1, 2, 0).numpy() + [1, 1, 1]) / [2, 2, 2]
-        )
+        ax[1, i].imshow((imgs[i].permute(1, 2, 0).numpy() + [1, 1, 1]) / [2, 2, 2])
         ax[1, i].axis(False)
 
     plt.subplots_adjust(wspace=0, hspace=0)

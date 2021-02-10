@@ -7,8 +7,8 @@ Training
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from .dataset import Data
-from .models import Generator, Discriminator, ResNetEncoder
+from Definitions.dataset import Data
+from Definitions.models import Generator, Discriminator, ResNetEncoder
 from torchvision.utils import make_grid
 from tqdm.auto import tqdm
 import matplotlib.pyplot as plt
@@ -133,6 +133,7 @@ class train:
 
 
 if __name__ == "__main__":
-    train = train("../../fashiondata/img", epochs=1, batch_size=100, vec_shape=100)
+    print("demo")
+    train = train(path="Data", epochs=1, batch_size=4, vec_shape=100, split=[1, 2000, 0], noisedim=100)
     train.trainer()
 
