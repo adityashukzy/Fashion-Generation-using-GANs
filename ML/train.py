@@ -82,8 +82,8 @@ class train:
                 vector = self.resnet(image)
                 discfakeout = self.disc(self.gen(vector).detach())
 
-                self.disOuts[0].append(torch.nn.functional.sigmoid(discfakeout).mean().item())
-                self.disOuts[1].append(torch.nn.functional.sigmoid(discrealout).mean().item())
+                self.disOuts[0].append(torch.sigmoid(discfakeout).mean().item())
+                self.disOuts[1].append(torch.sigmoid(discrealout).mean().item())
 
                 realdiscloss = self.criterion(discrealout, torch.ones_like(discrealout))
                 fakediscloss = self.criterion(discfakeout, torch.zeros_like(discfakeout))

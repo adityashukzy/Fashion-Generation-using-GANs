@@ -42,13 +42,10 @@ class Generator(nn.Module):
             self.genBlock(input_channels=412, hidden_size=312, kernel_size=4, stride=2, padding=1,),
             self.genBlock(input_channels=312, hidden_size=212, kernel_size=4, stride=2, padding=1,),
             self.genBlock(
-                input_channels=212,
-                hidden_size=3,
-                kernel_size=4,
-                stride=2,
-                padding=1,
-                last_layer=True,  # final layer returning tanh
+                input_channels=212, hidden_size=112, kernel_size=4, stride=2, padding=1,  # final layer returning tanh
             ),
+            nn.Conv2d(112, 3, 4, 1, 2),
+            nn.Tanh(),
         )
 
     def genBlock(
@@ -57,7 +54,7 @@ class Generator(nn.Module):
         if not last_layer:
             return nn.Sequential(
                 nn.ConvTranspose2d(
-                    input_channels, hidden_size, kernel_size=kernel_size, stride=stride, padding=padding, bias=False,
+                    input_channels, hidden_size, kernel_size=kernel_size, stride=stride, padding=padding, bias=True,
                 ),
                 nn.BatchNorm2d(hidden_size),
                 nn.ReLU(True),
