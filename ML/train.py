@@ -29,9 +29,9 @@ class train():
 				self.root = savedir
 				self.criterion = nn.BCEWithLogitsLoss()
 				beta1 = 0.5
-				lr = 0.002
-				self.discopt = optim.Adam(self.disc.parameters(), lr=lr, betas=(beta1, 0.999))
-				self.genopt = optim.Adam(list(self.resnet.parameters()) + list(self.gen.parameters()),lr=lr, betas=(beta1, 0.999))
+				lr = 0.0002
+				self.discopt = optim.Adam(self.disc.parameters(), lr=lr, betas=(beta1))
+				self.genopt = optim.Adam(list(self.resnet.parameters()) + list(self.gen.parameters()),lr=lr, betas=(beta1))
 				data = Data(path=path, batch_size=batch_size)
 				self.trainloader, self.testloader, _  = data.getdata(split=split)
 
@@ -117,9 +117,9 @@ class train():
 
 	def weights_init(self, m):
 		if isinstance(m, nn.Conv2d) or isinstance(m, nn.ConvTranspose2d):
-			torch.nn.init.normal_(m.weight, 0.0, 0.02)
+			torch.nn.init.normal_(m.weight, 0.0, 0.2)
 		if isinstance(m, nn.BatchNorm2d):
-			torch.nn.init.normal_(m.weight, 0.0, 0.02)
+			torch.nn.init.normal_(m.weight, 0.0, 0.2)
 			torch.nn.init.constant_(m.bias, 0)
 	
 	def plot_trainer(self):
