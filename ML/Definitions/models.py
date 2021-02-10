@@ -38,11 +38,11 @@ class Generator(nn.Module):
 
         self.gen = nn.Sequential(
             self.genBlock(input_channels=self.input_shape, hidden_size=512, kernel_size=4, stride=1, padding=0,),
-            self.genBlock(input_channels=512, hidden_size=256, kernel_size=4, stride=2, padding=1,),
-            self.genBlock(input_channels=256, hidden_size=128, kernel_size=4, stride=2, padding=1,),
-            self.genBlock(input_channels=128, hidden_size=64, kernel_size=4, stride=2, padding=1,),
+            self.genBlock(input_channels=512, hidden_size=412, kernel_size=4, stride=2, padding=1,),
+            self.genBlock(input_channels=412, hidden_size=312, kernel_size=4, stride=2, padding=1,),
+            self.genBlock(input_channels=312, hidden_size=212, kernel_size=4, stride=2, padding=1,),
             self.genBlock(
-                input_channels=64,
+                input_channels=212,
                 hidden_size=3,
                 kernel_size=4,
                 stride=2,
@@ -59,7 +59,7 @@ class Generator(nn.Module):
                 nn.ConvTranspose2d(
                     input_channels, hidden_size, kernel_size=kernel_size, stride=stride, padding=padding, bias=False,
                 ),
-                nn.InstanceNorm2d(hidden_size),
+                nn.BatchNorm2d(hidden_size),
                 nn.ReLU(True),
             )
         else:
@@ -124,7 +124,7 @@ class Discriminator(torch.nn.Module):
                     padding=1,
                     bias=False,
                 ),
-                nn.InstanceNorm2d(outputChannels),
+                nn.BatchNorm2d(outputChannels),
                 nn.LeakyReLU(0.2, inplace=True),
             )
 

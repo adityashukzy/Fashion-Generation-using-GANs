@@ -22,7 +22,16 @@ from time import time
 
 class train:
     def __init__(
-        self, path, epochs, batch_size, split, display_step=50, vec_shape=100, noisedim=100, savedir="ModelWeights"
+        self,
+        path,
+        epochs,
+        batch_size,
+        split,
+        display_step=50,
+        lr=0.002,
+        vec_shape=100,
+        noisedim=100,
+        savedir="ModelWeights",
     ):
 
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -35,8 +44,8 @@ class train:
         self.criterion = nn.BCEWithLogitsLoss()
         beta1 = 0.5
         lr = 0.002
-        self.discopt = optim.Adam(self.disc.parameters(), lr=lr, betas=(beta1, 0.999))
-        self.genopt = optim.Adam(
+        self.discopt = optim.AdamW(self.disc.parameters(), lr=lr, betas=(beta1, 0.999))
+        self.genopt = optim.AdamW(
             list(self.resnet.parameters()) + list(self.gen.parameters()), lr=lr, betas=(beta1, 0.999)
         )
         data = Data(path=path, batch_size=batch_size, size=(64, 64))
@@ -47,6 +56,8 @@ class train:
 
         self.discLosses = []
         self.genLosses = []
+
+        self.disOuts = [[], []]
 
     def trainer(self):
 
@@ -70,6 +81,9 @@ class train:
                 discrealout = self.disc(image)
                 vector = self.resnet(image)
                 discfakeout = self.disc(self.gen(vector).detach())
+
+                self.disOuts[0].append(torch.nn.functional.sigmoid(discfakeout).mean().item())
+                self.disOuts[1].append(torch.nn.functional.sigmoid(discrealout).mean().item())
 
                 realdiscloss = self.criterion(discrealout, torch.ones_like(discrealout))
                 fakediscloss = self.criterion(discfakeout, torch.zeros_like(discfakeout))
@@ -125,7 +139,7 @@ class train:
     def weights_init(self, m):
         if isinstance(m, nn.Conv2d) or isinstance(m, nn.ConvTranspose2d):
             torch.nn.init.normal_(m.weight, 0.0, 0.02)
-        if isinstance(m, nn.BatchNorm2d):
+        if isinstance(m, nn.BatchNorm2d):  # or isinstance(m, nn.InstanceNorm2d):
             torch.nn.init.normal_(m.weight, 0.0, 0.02)
             torch.nn.init.constant_(m.bias, 0)
 
@@ -133,6 +147,10 @@ class train:
         assert len(self.discLosses) != 0 and len(self.genLosses) != 0
         plt.plot(self.discLosses, label="Discriminator Loss")
         plt.plot(self.genLosses, label="Generator Loss")
+        plt.legend()
+        plt.show()
+        plt.plot(self.disOuts[0], label="Disc Fake")
+        plt.plot(self.disOuts[1], label="Disc Real")
         plt.legend()
         plt.show()
 
