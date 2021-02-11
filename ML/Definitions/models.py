@@ -13,10 +13,15 @@ class ResNetEncoder(nn.Module):
 
         self.model.fc = nn.Sequential(
             nn.Linear(self.model.fc.in_features, vec_shape),
+            nn.ReLU(True),
             nn.Linear(vec_shape, vec_shape),
+            nn.ReLU(True),
             nn.Linear(vec_shape, vec_shape),
+            nn.ReLU(True),
             nn.Linear(vec_shape, vec_shape),
+            nn.ReLU(True),
             nn.Linear(vec_shape, vec_shape),
+            nn.ReLU(True),
         )
 
     def forward(self, image):
