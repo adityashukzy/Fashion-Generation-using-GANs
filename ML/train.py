@@ -12,7 +12,7 @@ from .models import Generator, Discriminator, ResNetEncoder
 from torchvision.utils import make_grid
 from tqdm.auto import tqdm
 import matplotlib.pyplot as plt
-import numpy as np
+# import numpy as np
 from time import time
 
 
@@ -54,8 +54,8 @@ class train:
 		mean_discriminator_loss = 0
 		mean_generator_loss = 0
 		testimage = next(iter(self.testloader))
-		randIdx = np.random.choice(range(128))
-		testimage = testimage[randIdx].to(self.device)
+		# randIdx = np.random.choice(range(128))
+		testimage = testimage[0].to(self.device)
 
 		for epoch in range(self.epochs):
 			print("training")
