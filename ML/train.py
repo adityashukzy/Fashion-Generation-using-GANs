@@ -17,7 +17,7 @@ from time import time
 
 class train:
     def __init__(
-        self, path, epochs, batch_size, split, display_step=50, vec_shape=100, noise_dim=100, savedir="ModelWeights"
+        self, path, epochs, batch_size, split, display_step=10, vec_shape=100, noise_dim=100, savedir="ModelWeights"
     ):
 
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
