@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from .dataset import Data
-from .models import Generator, Discriminator, VggEncoder
+from .models import Generator, Discriminator,  ResNetEncoder
 from torchvision.utils import make_grid
 from tqdm.auto import tqdm
 import matplotlib.pyplot as plt
@@ -25,7 +25,7 @@ class train:
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.gen = Generator(device=self.device, noise_dim=noisedim, vec_shape=vec_shape).to(self.device)
         self.disc = Discriminator().to(self.device)
-        self.vgg = VggEncoder(vec_shape=vec_shape).to(self.device)
+        self.vgg = ResNetEncoder(vec_shape=vec_shape).to(self.device)
         self.epochs = epochs
         self.display_step = display_step
         self.root = savedir + "/"
