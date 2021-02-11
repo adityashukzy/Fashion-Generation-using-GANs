@@ -156,7 +156,7 @@ class Discriminator(torch.nn.Module):
                     bias=False,
                 ),
                 nn.LeakyReLU(0.2, inplace=True),
-                nn.Dropout(0.3)
+                nn.Dropout(0.3),
 
                 
             )
@@ -172,7 +172,7 @@ class Discriminator(torch.nn.Module):
                 ),
                 nn.BatchNorm2d(outputChannels),
                 nn.LeakyReLU(0.2, inplace=True),
-                nn.Dropout(0.3)
+                nn.Dropout(0.3),
             )
 
     def forward(self, inp):
