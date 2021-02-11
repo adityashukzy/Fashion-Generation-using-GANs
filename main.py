@@ -9,7 +9,7 @@ from time import time
 
 
 def main(inpPath, inpEpochs):
-    modeltrain = train(path=inpPath, epochs=inpEpochs, batch_size=4, vec_shape=100, split=[1, 2000, 0], noisedim=100)
+    modeltrain = train(path=inpPath, epochs=inpEpochs, batch_size=4, vec_shape=100, split=[1, 2000, 0], noise_dim=100)
     starting = time()
     modeltrain.trainer()
     print(time() - starting)

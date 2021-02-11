@@ -17,11 +17,11 @@ from time import time
 
 class train:
     def __init__(
-        self, path, epochs, batch_size, split, display_step=50, vec_shape=100, noisedim=100, savedir="ModelWeights"
+        self, path, epochs, batch_size, split, display_step=50, vec_shape=100, noise_dim=100, savedir="ModelWeights"
     ):
 
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.gen = Generator(device=self.device, noise_dim=noisedim, vec_shape=vec_shape).to(self.device)
+        self.gen = Generator(device=self.device, noise_dim=noise_dim, vec_shape=vec_shape).to(self.device)
         self.disc = Discriminator().to(self.device)
         self.resnet = ResNetEncoder(vec_shape=vec_shape).to(self.device)
         self.epochs = epochs

@@ -11,7 +11,7 @@ def main(dataPath):
 
 	print(f"Evalutating with VecSize {vec_shape} from {root}")
 
-	netG = ML.models.Generator(device="cpu", noisedim=500, vec_shape=vec_shape)
+	netG = ML.models.Generator(device="cpu", noise_dim=500, vec_shape=vec_shape)
 	netD = ML.models.Discriminator()
 	netENC = ML.models.ResNetEncoder(vec_shape)
 
