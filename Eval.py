@@ -7,7 +7,7 @@ from ML.dataset import Data
 def main(dataPath):
 	vec_shape = 1000
 
-	root = "55epoch/"
+	root = "/content/FashionGen/ModelWeights/"
 
 	print(f"Evalutating with VecSize {vec_shape} from {root}")
 
