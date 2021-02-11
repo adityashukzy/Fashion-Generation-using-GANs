@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from .dataset import Data
-from .models import Generator, Discriminator, ResNetEncoder
+from .models import Generator, Discriminator, VggEncoder
 from torchvision.utils import make_grid
 from tqdm.auto import tqdm
 import matplotlib.pyplot as plt
@@ -25,7 +25,7 @@ class train:
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.gen = Generator(device=self.device, noise_dim=noisedim, vec_shape=vec_shape).to(self.device)
         self.disc = Discriminator().to(self.device)
-        self.resnet = ResNetEncoder(vec_shape=vec_shape).to(self.device)
+        self.vgg = VggEncoder(vec_shape=vec_shape).to(self.device)
         self.epochs = epochs
         self.display_step = display_step
         self.root = savedir + "/"
@@ -36,7 +36,7 @@ class train:
         lr = 0.002
         self.discopt = optim.Adam(self.disc.parameters(), lr=lr, betas=(beta1, 0.999))
         self.genopt = optim.Adam(
-            list(self.resnet.parameters()) + list(self.gen.parameters()), lr=lr, betas=(beta1, 0.999)
+            list(self.vgg.parameters()) + list(self.gen.parameters()), lr=lr, betas=(beta1, 0.999)
         )
         data = Data(path=path, batch_size=batch_size, size=(64, 64))
         self.trainloader, self.testloader, _ = data.getdata(split=split)
@@ -67,7 +67,7 @@ class train:
                 image = image.to(self.device)
                 self.discopt.zero_grad()
                 discrealout = self.disc(image)
-                vector = self.resnet(image)
+                vector = self.vgg(image)
                 discfakeout = self.disc(self.gen(vector).detach())
 
                 realdiscloss = self.criterion(discrealout, torch.ones_like(discrealout))
@@ -94,7 +94,7 @@ class train:
                     print(
                         f"Step {cur_step}: Generator loss: {mean_generator_loss}, \t discriminator loss: {mean_discriminator_loss}"
                     )
-                    fake = self.gen(self.resnet(testimage))
+                    fake = self.gen(self.vgg(testimage))
                     self.show_tensor_images(fake)
                     self.show_tensor_images(testimage)
 
@@ -108,7 +108,7 @@ class train:
 
             print("Saving weights")
 
-            torch.save(self.resnet.state_dict(), self.root + "RES.pt")
+            torch.save(self.vgg.state_dict(), self.root + "RES.pt")
             torch.save(self.gen.state_dict(), self.root + "Gen.pt")
             torch.save(self.disc.state_dict(), self.root + "Dis.pt")
 
