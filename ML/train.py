@@ -17,7 +17,9 @@ from time import time
 
 class train:
     def __init__(
-        self, path, epochs, batch_size, split, display_step=50, vec_shape=100, noisedim=100, savedir="ModelWeights"
+        self, path, epochs, batch_size, split, display_step=50, 
+        vec_shape=100, noisedim=100, savedir="ModelWeights",
+        plotting_rows=10,
     ):
 
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -27,6 +29,8 @@ class train:
         self.epochs = epochs
         self.display_step = display_step
         self.root = savedir + "/"
+        
+        self.plot_row = plotting_rows
         self.criterion = nn.BCEWithLogitsLoss()
         beta1 = 0.5
         lr = 0.002
@@ -112,7 +116,7 @@ class train:
 
         image_tensor = (image_tensor + 1) / 2
         image_unflat = image_tensor.detach().cpu()
-        image_grid = make_grid(image_unflat[:num_images], nrow=5)
+        image_grid = make_grid(image_unflat[:num_images], nrow=self.plot_row)
         plt.imshow(image_grid.permute(1, 2, 0).squeeze())
         plt.axis(False)
         plt.show()
