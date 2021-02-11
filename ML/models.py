@@ -11,28 +11,41 @@ class identity(nn.Module):
         return x
 
 
-class VggEncoder(nn.Module):
+class ResNetEncoder(nn.Module):
     def __init__(self, vec_shape):
-        super(VggEncoder, self).__init__()
-        self.model = models.vgg16(pretrained=True)
+        super(ResNetEncoder, self).__init__()
+        self.model = models.resnet152(pretrained=True)
 
-        self.model.avgpool1 = identity()
-        
         for param in self.model.parameters():
             param.requires_grad = False
-        
-        
-        self.model.classifier = nn.Sequential(
-                                nn.Linear(25088, 7000),
-                                nn.ReLU(), 
-                                nn.Linear(7000, 6000),
-                                nn.ReLU(),
-                                nn.Linear(6000, vec_shape),
-        )
-        
+
+        self.model.fc = nn.Linear(self.model.fc.in_features, vec_shape)
 
     def forward(self, image):
         return self.model(image)
+
+# class resnetEncoder(nn.Module):
+#     def __init__(self, vec_shape):
+#         super(resnetEncoder, self).__init__()
+#         self.model = models.resnet16(pretrained=True)
+
+#         self.model.avgpool1 = identity()
+        
+#         for param in self.model.parameters():
+#             param.requires_grad = False
+        
+        
+#         self.model.classifier = nn.Sequential(
+#                                 nn.Linear(25088, 7000),
+#                                 nn.ReLU(), 
+#                                 nn.Linear(7000, 6000),
+#                                 nn.ReLU(),
+#                                 nn.Linear(6000, vec_shape),
+#         )
+        
+
+#     def forward(self, image):
+#         return self.model(image)
 
 
 class Generator(nn.Module):
@@ -148,16 +161,16 @@ def main():
     else:
         device = "cpu"
 
-    vgg = VggEncoder(vec_shape)
-    vgg = vgg.to(device)
+    resnet = ResNetEncoder(vec_shape)
+    resnet = resnet.to(device)
     gen = Generator(device=device, noise_dim=1000, vec_shape=vec_shape)
     gen = gen.to(device)
 
     disc = Discriminator()
 
     for i in range(2):
-        print(gen(vgg(torch.randn(batch_size, 3, 64, 64))).shape)
-        print(disc(gen(vgg(torch.randn(batch_size, 3, 64, 64, device=device)))).shape)
+        print(gen(resnet(torch.randn(batch_size, 3, 64, 64))).shape)
+        print(disc(gen(resnet(torch.randn(batch_size, 3, 64, 64, device=device)))).shape)
 
 
 if __name__ == "__main__":
