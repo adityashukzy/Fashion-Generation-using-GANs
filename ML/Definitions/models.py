@@ -17,10 +17,6 @@ class ResNetEncoder(nn.Module):
             nn.Linear(vec_shape, vec_shape),
             nn.Linear(vec_shape, vec_shape),
             nn.Linear(vec_shape, vec_shape),
-            nn.Linear(vec_shape, vec_shape),
-            nn.Linear(vec_shape, vec_shape),
-            nn.Linear(vec_shape, vec_shape),
-            nn.Linear(vec_shape, vec_shape),
         )
 
     def forward(self, image):
@@ -54,7 +50,7 @@ class Generator(nn.Module):
         if not last_layer:
             return nn.Sequential(
                 nn.ConvTranspose2d(
-                    input_channels, hidden_size, kernel_size=kernel_size, stride=stride, padding=padding, bias=True,
+                    input_channels, hidden_size, kernel_size=kernel_size, stride=stride, padding=padding, bias=False,
                 ),
                 nn.BatchNorm2d(hidden_size),
                 nn.ReLU(True),
