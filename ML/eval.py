@@ -4,12 +4,8 @@ import matplotlib.pyplot as plt
 import Definitions.models as models
 from Definitions.dataset import Data
 
-if __name__ == "__main__":
-    vec_shape = 1000
-    noise_dim = 500
-    root = "55epoch/"
 
-    print(f"Evalutating with VecSize {vec_shape} from {root}")
+def main(imgpath="Data", noise_dim=500, vec_shape=1000, root="./ModelWeights/"):
 
     netG = models.Generator(device="cpu", noise_dim=noise_dim, vec_shape=vec_shape)
     netD = models.Discriminator()
@@ -24,7 +20,7 @@ if __name__ == "__main__":
     # netENC.eval()
 
     numrows = 5
-    d = Data(path="Data", batch_size=numrows, size=(64, 64))
+    d = Data(path=imgpath, batch_size=numrows, size=(64, 64))
 
     d_loaded = DataLoader(d.folderdata, numrows, shuffle=True)
 
@@ -46,3 +42,8 @@ if __name__ == "__main__":
 
     plt.subplots_adjust(wspace=0, hspace=0)
     plt.show()
+
+
+if __name__ == "__main__":
+    main()
+

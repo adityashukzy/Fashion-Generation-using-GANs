@@ -6,7 +6,7 @@ import torch
 class ResNetEncoder(nn.Module):
     def __init__(self, vec_shape):
         super(ResNetEncoder, self).__init__()
-        self.model = models.resnet18(pretrained=True)
+        self.model = models.resnet50(pretrained=True)
 
         for param in self.model.parameters():
             param.requires_grad = False
@@ -15,13 +15,13 @@ class ResNetEncoder(nn.Module):
             nn.Linear(self.model.fc.in_features, vec_shape),
             nn.ReLU(True),
             nn.Linear(vec_shape, vec_shape),
-            nn.ReLU(True),
-            nn.Linear(vec_shape, vec_shape),
-            nn.ReLU(True),
-            nn.Linear(vec_shape, vec_shape),
-            nn.ReLU(True),
-            nn.Linear(vec_shape, vec_shape),
-            nn.ReLU(True),
+            # nn.ReLU(True),
+            # nn.Linear(vec_shape, vec_shape),
+            # nn.ReLU(True),
+            # nn.Linear(vec_shape, vec_shape),
+            # nn.ReLU(True),
+            # nn.Linear(vec_shape, vec_shape),
+            # nn.ReLU(True),
         )
 
     def forward(self, image):
