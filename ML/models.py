@@ -3,15 +3,33 @@ from torchvision import models
 import torch
 
 
-class ResNetEncoder(nn.Module):
-    def __init__(self, vec_shape):
-        super(ResNetEncoder, self).__init__()
-        self.model = models.resnet18(pretrained=True)
+class identity(nn.Module):
+    def __init__(self):
+        super(identity, self).__init__()
 
+    def forward(self, x):
+        return x
+
+
+class VggEncoder(nn.Module):
+    def __init__(self, vec_shape):
+        super(VggEncoder, self).__init__()
+        self.model = models.vgg16(pretrained=True)
+
+        self.model.avgpool1 = identity()
+        
         for param in self.model.parameters():
             param.requires_grad = False
-
-        self.model.fc = nn.Linear(self.model.fc.in_features, vec_shape)
+        
+        
+        self.model.classifier = nn.Sequential(
+                                nn.Linear(25088, 600),
+                                nn.ReLU(), 
+                                nn.Linear(600, 750),
+                                nn.ReLU(),
+                                nn.Linear(750, vec_shape),
+        )
+        
 
     def forward(self, image):
         return self.model(image)
@@ -102,7 +120,7 @@ class Discriminator(torch.nn.Module):
                     padding=1,
                     bias=False,
                 ),
-                nn.LeakyReLU(0.2, inplace=True),
+                nn.PReLU(),
             )
         else:
             return nn.Sequential(
@@ -115,7 +133,7 @@ class Discriminator(torch.nn.Module):
                     bias=False,
                 ),
                 nn.BatchNorm2d(outputChannels),
-                nn.LeakyReLU(0.2, inplace=True),
+                nn.PReLU(),
             )
 
     def forward(self, inp):
@@ -124,22 +142,22 @@ class Discriminator(torch.nn.Module):
 
 def main():
     vec_shape = 1000
-    batch_size = 128
+    batch_size = 12
     if torch.cuda.is_available():
         device = "cuda"
     else:
         device = "cpu"
 
-    resNet = ResNetEncoder(vec_shape)
-    resNet = resNet.to(device)
-    gen = Generator(device=device, noise_dim=500, vec_shape=vec_shape)
+    vgg = VggEncoder(vec_shape)
+    vgg = vgg.to(device)
+    gen = Generator(device=device, noise_dim=1000, vec_shape=vec_shape)
     gen = gen.to(device)
 
     disc = Discriminator()
 
     for i in range(2):
-        print(gen(resNet(torch.randn(batch_size, 3, 64, 64))).shape)
-        print(disc(gen(resNet(torch.randn(batch_size, 3, 64, 64, device=device)))).shape)
+        print(gen(vgg(torch.randn(batch_size, 3, 64, 64))).shape)
+        print(disc(gen(vgg(torch.randn(batch_size, 3, 64, 64, device=device)))).shape)
 
 
 if __name__ == "__main__":
