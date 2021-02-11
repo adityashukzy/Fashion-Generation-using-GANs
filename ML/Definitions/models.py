@@ -38,10 +38,13 @@ class Generator(nn.Module):
             self.genBlock(input_channels=256, hidden_size=128, kernel_size=4, stride=2, padding=1,),
             self.genBlock(input_channels=128, hidden_size=64, kernel_size=4, stride=2, padding=1,),
             self.genBlock(
-                input_channels=64, hidden_size=64, kernel_size=4, stride=2, padding=1,  # final layer returning tanh
+                input_channels=64,
+                hidden_size=3,
+                kernel_size=4,
+                stride=2,
+                padding=1,
+                last_layer=True,  # final layer returning tanh
             ),
-            nn.Conv2d(64, 3, 4, 1, 2),
-            nn.Tanh(),
         )
 
     def genBlock(
@@ -92,6 +95,7 @@ class Discriminator(torch.nn.Module):
             self.discBlock(inputChannels=3, outputChannels=128, first_layer=True),
             self.discBlock(inputChannels=128, outputChannels=256),
             self.discBlock(inputChannels=256, outputChannels=512),
+            self.discBlock(inputChannels=512, outputChannels=512),
         )
 
     def discBlock(self, inputChannels, outputChannels, first_layer=False):
