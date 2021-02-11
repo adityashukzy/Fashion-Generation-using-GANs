@@ -98,7 +98,7 @@ def main(dataPath):
 	data = Data(path=dataPath, batch_size=12)
 	split = [5, 1, 0]
 	train, test, val = data.getdata(split)
-	print(train.shape, test.shape, val.shape)
+	print(len(train), len(test), len(val))
 
 if __name__ == "__main__":
 	main()
