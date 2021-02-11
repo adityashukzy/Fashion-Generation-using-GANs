@@ -6,23 +6,12 @@ import torch
 class ResNetEncoder(nn.Module):
     def __init__(self, vec_shape):
         super(ResNetEncoder, self).__init__()
-        self.model = models.resnet50(pretrained=True)
+        self.model = models.resnet101(pretrained=True)
 
         for param in self.model.parameters():
             param.requires_grad = False
 
-        self.model.fc = nn.Sequential(
-            nn.Linear(self.model.fc.in_features, vec_shape),
-            nn.ReLU(True),
-            nn.Linear(vec_shape, vec_shape),
-            # nn.ReLU(True),
-            # nn.Linear(vec_shape, vec_shape),
-            # nn.ReLU(True),
-            # nn.Linear(vec_shape, vec_shape),
-            # nn.ReLU(True),
-            # nn.Linear(vec_shape, vec_shape),
-            # nn.ReLU(True),
-        )
+        self.model.fc = nn.Linear(self.model.fc.in_features, vec_shape)
 
     def forward(self, image):
         return self.model(image)
@@ -34,7 +23,6 @@ class Generator(nn.Module):
 
         self.device = kwargs["device"]
         self.noisedim = kwargs["noise_dim"]
-        # self.vector_shape = kwargs["vec_shape"]
         self.input_shape = kwargs["vec_shape"] + kwargs["noise_dim"]
 
         self.gen = nn.Sequential(
@@ -61,7 +49,7 @@ class Generator(nn.Module):
                     input_channels, hidden_size, kernel_size=kernel_size, stride=stride, padding=padding, bias=False,
                 ),
                 nn.BatchNorm2d(hidden_size),
-                nn.ReLU(True),
+                nn.PReLU(),
             )
         else:
             return nn.Sequential(
@@ -100,7 +88,6 @@ class Discriminator(torch.nn.Module):
             self.discBlock(inputChannels=3, outputChannels=128, first_layer=True),
             self.discBlock(inputChannels=128, outputChannels=256),
             self.discBlock(inputChannels=256, outputChannels=512),
-            self.discBlock(inputChannels=512, outputChannels=512),
         )
 
     def discBlock(self, inputChannels, outputChannels, first_layer=False):
