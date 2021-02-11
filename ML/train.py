@@ -18,6 +18,7 @@ from torchvision.utils import make_grid
 from tqdm.auto import tqdm
 import matplotlib.pyplot as plt
 from time import time
+import math
 
 
 class train:
@@ -28,7 +29,7 @@ class train:
         batch_size,
         split,
         display_step=50,
-        lr=0.002,
+        lr=[0.002, 0.002],
         vec_shape=100,
         noisedim=100,
         savedir="ModelWeights",
@@ -43,10 +44,9 @@ class train:
         self.root = savedir + "/"
         self.criterion = nn.BCEWithLogitsLoss()
         beta1 = 0.5
-        lr = 0.002
-        self.discopt = optim.AdamW(self.disc.parameters(), lr=lr, betas=(beta1, 0.999))
+        self.discopt = optim.AdamW(self.disc.parameters(), lr=lr[1], betas=(beta1, 0.999))
         self.genopt = optim.AdamW(
-            list(self.resnet.parameters()) + list(self.gen.parameters()), lr=lr, betas=(beta1, 0.999)
+            list(self.resnet.parameters()) + list(self.gen.parameters()), lr=lr[0], betas=(beta1, 0.999)
         )
         data = Data(path=path, batch_size=batch_size, size=(64, 64))
         self.trainloader, self.testloader, _ = data.getdata(split=split)
@@ -83,7 +83,6 @@ class train:
                 discfakeout = self.disc(self.gen(vector).detach())
 
                 self.disOuts[0].append(torch.sigmoid(discfakeout).mean().item())
-                self.disOuts[1].append(torch.sigmoid(discrealout).mean().item())
 
                 realdiscloss = self.criterion(discrealout, torch.ones_like(discrealout))
                 fakediscloss = self.criterion(discfakeout, torch.zeros_like(discfakeout))
@@ -101,17 +100,19 @@ class train:
                 genoutloss = self.criterion(genout, torch.ones_like(genout))
 
                 genoutloss.backward()
+
+                self.disOuts[1].append(torch.sigmoid(genout).mean().item())
                 mean_generator_loss += genoutloss.item() / display_step
                 self.genopt.step()
 
                 # print(cur_step)
                 if cur_step % display_step == 0 and cur_step > 0:
                     print(
-                        f"Step {cur_step}: Generator loss: {mean_generator_loss}, \t discriminator loss: {mean_discriminator_loss}"
+                        f"[{epoch}]  Step {cur_step}: Generator loss: {mean_generator_loss}, \t discriminator loss: {mean_discriminator_loss}"
                     )
                     fake = self.gen(self.resnet(testimage))
-                    self.show_tensor_images(fake)
-                    self.show_tensor_images(testimage)
+
+                    self.show_tensor_images(torch.cat((fake, testimage), 0))
 
                     self.discLosses.append(mean_discriminator_loss)
                     self.genLosses.append(mean_generator_loss)
@@ -131,7 +132,9 @@ class train:
 
         image_tensor = (image_tensor + 1) / 2
         image_unflat = image_tensor.detach().cpu()
-        image_grid = make_grid(image_unflat[:num_images], nrow=5)
+        num_imgs =  image_unflat.shape[0]
+        image_grid = make_grid(image_unflat[:num_images], nrow=int(math.sqrt(num_imgs)))
+        plt.figure(figsize = (10,10))
         plt.imshow(image_grid.permute(1, 2, 0).squeeze())
         plt.axis(False)
         plt.show()
