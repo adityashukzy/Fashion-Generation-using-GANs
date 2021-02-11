@@ -23,11 +23,11 @@ class VggEncoder(nn.Module):
         
         
         self.model.classifier = nn.Sequential(
-                                nn.Linear(25088, 600),
+                                nn.Linear(25088, 7000),
                                 nn.ReLU(), 
-                                nn.Linear(600, 750),
+                                nn.Linear(7000, 6000),
                                 nn.ReLU(),
-                                nn.Linear(750, vec_shape),
+                                nn.Linear(6000, vec_shape),
         )
         
 
@@ -120,7 +120,7 @@ class Discriminator(torch.nn.Module):
                     padding=1,
                     bias=False,
                 ),
-                nn.PReLU(),
+                nn.LeakyReLU(0.2, inplace=True),
             )
         else:
             return nn.Sequential(
@@ -133,7 +133,7 @@ class Discriminator(torch.nn.Module):
                     bias=False,
                 ),
                 nn.BatchNorm2d(outputChannels),
-                nn.PReLU(),
+                nn.LeakyReLU(0.2, inplace=True),
             )
 
     def forward(self, inp):
