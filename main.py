@@ -13,7 +13,7 @@ def main(inpPath, inpEpochs):
     starting = time()
     modeltrain.trainer()
     print(time() - starting)
-    modeltrain.plot_trainer()
+    # modeltrain.plot_trainer()
 
 
 if __name__ == "__main__":
