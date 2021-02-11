@@ -1,30 +1,26 @@
 import torch
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
-import ML.models
-from ML.dataset import Data
+from ML.models import ResNetEncoder, Discriminator, Generator
+from ML.utils.dataset import Data
 
 if __name__ == "__main__":
     vec_shape = 1000
 
-    root = "55epoch/"
+    print(f"Evalutating with VecSize {vec_shape}")
 
-    print(f"Evalutating with VecSize {vec_shape} from {root}")
+    netG = Generator(device="cpu", noise_dim=500, vec_shape=vec_shape)
+    netD = Discriminator()
+    netENC = ResNetEncoder(vec_shape)
 
-    netG = ML.models.Generator(device="cpu", noisedim=500, vec_shape=vec_shape)
-    netD = ML.models.Discriminator()
-    netENC = ML.models.ResNetEncoder(vec_shape)
+    netG.load_state_dict(torch.load("Gen.pt", map_location=torch.device("cpu")))
+    netENC.load_state_dict(torch.load("RES.pt", map_location=torch.device("cpu")))
 
-    netG.load_state_dict(torch.load(root + "Gen.pt"))
-    netD.load_state_dict(torch.load(root + "Dis.pt"))
-    netENC.load_state_dict(torch.load(root + "RES.pt"))
+    netG.eval()
+    netENC.eval()
 
-    # netG.eval()
-    # netD.eval()
-    # netENC.eval()
-
-    numrows = 5
-    d = Data(path="Data", batch_size=numrows, size=(64, 64))
+    numrows = 10
+    d = Data(path="../fashiondata/img", batch_size=numrows, size=(64, 64))
 
     d_loaded = DataLoader(d.folderdata, numrows, shuffle=True)
 
