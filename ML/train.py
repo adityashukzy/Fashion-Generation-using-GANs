@@ -19,9 +19,9 @@ class train:
     def __init__(
         self, path, epochs, batch_size, split, display_step=50, 
         vec_shape=100, noisedim=100, savedir="/content/drive/MyDrive/fashiongendata",
-        plotting_rows=10,
+        plotting_rows=10,loadmodel=False,
     ):
-
+        self.continuetraining = loadmodel
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.gen = Generator(device=self.device, noise_dim=noisedim, vec_shape=vec_shape).to(self.device)
         self.disc = Discriminator().to(self.device)
@@ -41,8 +41,15 @@ class train:
         data = Data(path=path, batch_size=batch_size, size=(64, 64))
         self.trainloader, self.testloader, _ = data.getdata(split=split)
 
-        self.gen = self.gen.apply(self.weights_init)
-        self.disc = self.disc.apply(self.weights_init)
+        if self.continuetraining == False:
+            self.gen = self.gen.apply(self.weights_init)
+            self.disc = self.disc.apply(self.weights_init)
+
+        else:
+            print("laoding weights")
+            self.gen.load_state_dict(torch.load(self.continuetraining[0])) ## path  generator
+            self.resnet.load_state_dict(torch.laod(self.continuetraining[1])) ## path resnet
+            self.disc.load_state_dict(torch.load(self.continuetraining[2]))   ## path discriminator
 
         self.discLosses = []
         self.genLosses = []
