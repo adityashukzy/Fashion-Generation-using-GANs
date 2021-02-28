@@ -3,6 +3,9 @@ from torchvision import models
 import torch
 
 class Generator(nn.Module):
+	"""
+	Generator architecture of the GAN
+	"""
 	def __init__(self, **kwargs):
 		super(Generator, self).__init__()
 
@@ -96,6 +99,9 @@ class Generator(nn.Module):
 
 
 class Discriminator(nn.Module):
+	"""
+	Discriminator architecture of the GAN
+	"""
 	def __init__(self):
 		super(Discriminator, self).__init__()
 	
