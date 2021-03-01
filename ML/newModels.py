@@ -84,7 +84,7 @@ class Generator(nn.Module):
 			)
 
 	def generateNoise(self, batch_size):
-		return torch.randn(batch_size, self.noise_dim, device=self.device)
+		return torch.randn(batch_size, self.noise_dim, 1, 1, device=self.device)
 
 	def forward(self, batch_size):
 		'''

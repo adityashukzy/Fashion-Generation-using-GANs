@@ -5,8 +5,8 @@ Training
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from .dataset import Data
-from .newModels import Generator, Discriminator
+from dataset import Data
+from newModels import Generator, Discriminator
 import matplotlib.pyplot as plt
 from torchvision.utils import make_grid
 from tqdm.auto import tqdm
@@ -65,6 +65,7 @@ class Train:
 				self.disc_optim.zero_grad()
 
 				image = image.to(self.device)
+				print(image.shape)
 
 				disc_real_out = self.disc(image)
 				disc_fake_out = self.disc(self.gen(batch_size=image.shape[0]).detach())
@@ -137,7 +138,7 @@ class Train:
 		plt.show()
 
 def main():
-	train = train("../../fashiondata/img", epochs=1, batch_size=100)
+	train = Train("/Users/adityashukla/Documents/GitHub/observations-master/experiements/data/with_mask", epochs=1, batch_size=100)
 	train.trainer()
 
 if __name__ == "__main__":
