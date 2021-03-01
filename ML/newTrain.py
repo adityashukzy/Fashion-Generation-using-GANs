@@ -64,6 +64,8 @@ class Train:
 				## Training the discriminator
 				self.disc_optim.zero_grad()
 
+				image = image.to(self.device)
+
 				disc_real_out = self.disc(image)
 				disc_fake_out = self.disc(self.gen(batch_size=image.shape[0]).detach())
 				# presumably, in our orig model, here we passed the image encoding
