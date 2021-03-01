@@ -54,8 +54,8 @@ class Train:
 		mean_disc_loss = mean_gen_loss = 0
 		cur_step = 0
 
-		testimage = next(iter(self.testloader))
-		testimage = testimage[0].to(self.device)
+		test_image = next(iter(self.test_loader))
+		test_image = test_image[0].to(self.device)
 
 		for epoch in range(self.epochs):
 			print(f"Training on {epoch}'th epoch. ")
@@ -94,9 +94,9 @@ class Train:
 				if cur_step % self.display_step == 0:
 					print(f"Step: {cur_step} Generator Loss: {mean_gen_loss}, \t Discriminator Loss: {mean_disc_loss}")
 
-					fake = self.gen(batch_size=testimage.shape[0])
+					fake = self.gen(batch_size=test_image.shape[0])
 					self.show_tensor_images(fake)
-					self.show_tensor_images(testimage)
+					self.show_tensor_images(test_image)
 
 					self.discLosses.append(mean_disc_loss)
 					self.genLosses.append(mean_gen_loss)
