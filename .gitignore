@@ -5,9 +5,8 @@ ML/__pycache__
 ML/Definitions/__pycache__
 Data_small
 
-ModelWeights/Dis.pt
+
 ModelWeights/RES.pt
-ModelWeights/Gen.pt
 
 Landmarks_weights
 55epoch
