@@ -47,18 +47,15 @@ The model did not seem to converge, and the quality of outputs did not increase 
 ## Instructions to run
 
 * Pre-requisites:
-	-  < insert pre-requisite >
-	-  < insert pre-requisite >
+	-  torch
+	-  torchvision
+	-  tqdm
+	-  matplotlib
+	-  time
 
-* < directions to install > 
+* Clone the repository
 ```bash
-< insert code >
-```
-
-* < directions to execute >
-
-```bash
-< insert code >
+git clone https://github.com/Data-Science-Community-SRM/FashionGen
 ```
 
 ## Contributors
