@@ -7,8 +7,6 @@
 </p>
 
 ---
-[![DOCS](https://img.shields.io/badge/Documentation-see%20docs-green?style=flat-square&logo=appveyor)](INSERT_LINK_FOR_DOCS_HERE) 
-  [![UI ](https://img.shields.io/badge/User%20Interface-Link%20to%20UI-orange?style=flat-square&logo=appveyor)](INSERT_UI_LINK_HERE)
 
 ## Description
 Our team of 5 worked on the task of generating novel fashion images from an existing dataset called [DeepFashion]() using the popular generative adversarial network (or GAN) architecture. We experimented with several different architectures, losses, learning rates, training techniques (which are a particular stress point when it comes to building GANs.).
@@ -19,7 +17,7 @@ In addition, we also added an element of giving the generator some meaningful in
 
 The idea behind this method is to give the generator some help in that we are giving it noise which already has some rhyme and reason, which will hopefully make the generator's job easier when it comes to mapping this noise to a proper output which can fool the discriminator.
 
-## Preview
+## Preview (training for ~500 epochs)
 ### Beginning of training
 ![Screen Shot 2021-03-05 at 11 00 22](https://user-images.githubusercontent.com/20011207/110071433-05c67c00-7da2-11eb-8d46-13759b7b0161.png)
 ![Screen Shot 2021-03-05 at 11 01 19](https://user-images.githubusercontent.com/20011207/110071480-1ecf2d00-7da2-11eb-928c-6eeb98583d8a.png)
@@ -40,6 +38,7 @@ The idea behind this method is to give the generator some help in that we are gi
 ![Screen Shot 2021-03-05 at 11 15 15](https://user-images.githubusercontent.com/20011207/110072612-111aa700-7da4-11eb-936f-108c319495fc.png)
 ![Screen Shot 2021-03-05 at 11 16 42](https://user-images.githubusercontent.com/20011207/110072747-458e6300-7da4-11eb-84c5-824727757c49.png)
 
+The model did not seem to converge, and the quality of outputs did not increase significantly after this point.
 <br>
 
 
