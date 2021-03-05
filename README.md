@@ -2,7 +2,7 @@
 <a href="https://dscommunity.in">
 	<img src="https://github.com/Data-Science-Community-SRM/template/blob/master/Header.png?raw=true" width=80%/>
 </a>
-	<h1 align="center">Fashion GAN</h1>
+	<h1 align="center">Fashion Generation using Generative Modeling</h1>
 	<h4 align="center">Deep Convolutional GAN to generate fashion images<h4>
 </p>
 
