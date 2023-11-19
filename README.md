@@ -112,36 +112,6 @@ Aradhya Tripathi
 </p>
 </td>
 
-<td>
-
-Harsh Sharma
-
-<p align="center">
-<img src = "https://avatars.githubusercontent.com/u/56259814?s=400&u=f08cf73c6051e212a4ffc3a7cef84e872abcf35a&v=4"  height="120" alt="Your Name Here (Insert Your Image Link In Src">
-</p>
-<p align="center">
-<a href = "https://github.com/harshgeek4coder"><img src = "http://www.iconninja.com/files/241/825/211/round-collaboration-social-github-code-circle-network-icon.svg" width="36" height = "36"/></a>
-<a href = "https://www.linkedin.com/in/harshsharma27/">
-<img src = "http://www.iconninja.com/files/863/607/751/network-linkedin-social-connection-circular-circle-media-icon.svg" width="36" height="36"/>
-</a>
-</p>
-</td>
-
-<td>
-
-Harshit Aggarwal
-
-<p align="center">
-<img src = "https://avatars.githubusercontent.com/u/51515489?s=400&u=193dc2f58f7e354e413fadb400e12767fd7ac509&v=4"  height="120" alt="Harshit Aggarwal">
-</p>
-<p align="center">
-<a href = "https://github.com/harshitaggarwal01"><img src = "http://www.iconninja.com/files/241/825/211/round-collaboration-social-github-code-circle-network-icon.svg" width="36" height = "36"/></a>
-<a href = "https://www.linkedin.com/in/harshit-a-46b4a0b7/">
-<img src = "http://www.iconninja.com/files/863/607/751/network-linkedin-social-connection-circular-circle-media-icon.svg" width="36" height="36"/>
-</a>
-</p>
-</td>
-
 </tr>
   </table>
   
